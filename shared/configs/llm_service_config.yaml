@@ -1,0 +1,182 @@
+# vLLM Service Configuration
+
+# vLLM server settings
+vllm_llama:
+  # Base URL for vLLM service
+  # In production, this should point to a load balancer (nginx/HAProxy) that distributes
+  # requests across multiple vLLM service instances running on different GPUs.
+  # Example: "http://localhost:8000/v1" (load balancer address)
+  base_url: "http://localhost:8000/"  # directly to the load balancer, 8000-8003 are used by the vllm services
+  
+  api_key: "dummy-key"  # Not used for local vLLM, but required by OpenAI client
+  # model_name: "openai/gpt-oss-120b"
+  model_name: "gradientai/Llama-3-8B-Instruct-262k"
+  # model_name: "Qwen/Qwen3-4B-Instruct-2507"
+  # model_name: "Qwen/Qwen3-235B-A22B-Instruct-2507"
+  timeout: 300
+  
+  # Rate limiting: Maximum concurrent requests to vLLM server
+  # Lower this if you're getting 500 errors (suggests server overload)
+  # Recommended: 4-8 for small models, 2-4 for large models
+  max_concurrent_requests: 64
+  
+  # Retry configuration for server errors
+  max_retries: 3  # Number of retries for 500/502/503/504 errors
+  retry_delay: 1.0  # Initial delay in seconds
+  retry_backoff: 2.0  # Exponential backoff multiplier
+  
+  # Default sampling parameters
+  # temperature: 0.7
+  # top_p: 0.8
+  
+  # for llama
+  temperature: 0.6
+  top_p: 0.9
+
+  top_k: 20
+  
+  max_tokens: 16384
+
+  presence_penalty: 0.0
+  chat_template_kwargs:
+    enable_thinking: false
+
+
+vllm_qwen:
+  # Base URL for vLLM service
+  # In production, this should point to a load balancer (nginx/HAProxy) that distributes
+  # requests across multiple vLLM service instances running on different GPUs.
+  base_url: "http://localhost:7999/"  # directly to the load balancer, 8000-8003 are used by the vllm services
+  
+  api_key: "dummy-key"  # Not used for local vLLM, but required by OpenAI client
+  # model_name: "openai/gpt-oss-120b"
+  model_name: "Qwen/Qwen3-8B"
+  
+  timeout: 300
+  
+  # Rate limiting: Maximum concurrent requests to vLLM server
+  # Lower this if you're getting 500 errors (suggests server overload)
+  # Recommended: 4-8 for small models, 2-4 for large models
+  max_concurrent_requests: 64
+  
+  # Retry configuration for server errors
+  max_retries: 3  # Number of retries for 500/502/503/504 errors
+  retry_delay: 1.0  # Initial delay in seconds
+  retry_backoff: 2.0  # Exponential backoff multiplier
+  
+  # Default sampling parameters
+  temperature: 0.7
+  top_p: 0.8
+  top_k: 20
+  
+  max_tokens: 16384
+
+  presence_penalty: 0.0
+  chat_template_kwargs:
+    enable_thinking: false
+
+
+vllm_oss:
+  # Base URL for vLLM service
+  # In production, this should point to a load balancer (nginx/HAProxy) that distributes
+  # requests across multiple vLLM service instances running on different GPUs.
+  # Example: "http://localhost:8000/v1" (load balancer address)
+  base_url: "http://localhost:7000/"  # directly to the load balancer, 8000-8003 are used by the vllm services
+  
+  api_key: "dummy-key"  # Not used for local vLLM, but required by OpenAI client
+  model_name: "openai/gpt-oss-120b" 
+  timeout: 300
+  
+  # Rate limiting: Maximum concurrent requests to vLLM server
+  # Lower this if you're getting 500 errors (suggests server overload)
+  # Recommended: 4-8 for small models, 2-4 for large models
+  max_concurrent_requests: 64
+  
+  # Retry configuration for server errors
+  max_retries: 3  # Number of retries for 500/502/503/504 errors
+  retry_delay: 1.0  # Initial delay in seconds
+  retry_backoff: 2.0  # Exponential backoff multiplier
+  
+  # Default sampling parameters
+  temperature: 0.7
+  top_p: 0.8
+  top_k: 20
+  
+  max_tokens: 16384
+
+  presence_penalty: 0.0
+  chat_template_kwargs:
+    enable_thinking: false
+
+vllm_deepreviewer:
+    # Base URL for vLLM service
+  # In production, this should point to a load balancer (nginx/HAProxy) that distributes
+  # requests across multiple vLLM service instances running on different GPUs.
+  # Example: "http://localhost:8000/v1" (load balancer address)
+  base_url: "http://localhost:7999/"  # directly to the load balancer, 8000-8003 are used by the vllm services
+  
+  api_key: "dummy-key"  # Not used for local vLLM, but required by OpenAI client
+  model_name: "WestlakeNLP/DeepReviewer-14B" 
+  timeout: 300
+  
+  # Rate limiting: Maximum concurrent requests to vLLM server
+  # Lower this if you're getting 500 errors (suggests server overload)
+  # Recommended: 4-8 for small models, 2-4 for large models
+  max_concurrent_requests: 64
+  
+  # Retry configuration for server errors
+  max_retries: 3  # Number of retries for 500/502/503/504 errors
+  retry_delay: 1.0  # Initial delay in seconds
+  retry_backoff: 2.0  # Exponential backoff multiplier
+  
+  # Default sampling parameters
+  temperature: 0.7
+  top_p: 0.8
+  top_k: 20
+  
+  max_tokens: 16384
+
+  presence_penalty: 0.0
+  chat_template_kwargs:
+    enable_thinking: false
+
+
+# GPT / OpenRouter API Configuration
+gpt:
+  enabled: true
+  # Leave api_key null so it is taken from OPENAI_API_KEY or OPENROUTER_API_KEY
+  api_key: 1234
+  # Use the OpenRouter model you specified
+  # model_name: "openai/gpt-oss-120b"
+  model_name: "Qwen/Qwen3-8B"
+  # Point the OpenAI-compatible client to OpenRouter
+  base_url: "http://localhost:7999/"
+  timeout: 300
+  
+  # Default sampling parameters
+  temperature: 0.7
+  top_p: 0.95
+  max_tokens: 16384
+  presence_penalty: 0.0
+
+# LLM Service Assignment
+# Each pipeline component can independently specify the LLM service to use (vllm / gpt or future extended other services)
+# Correspondance: Insight Miner, Result Analyzer, Reviewer, Related Work Searcher, Refiner
+llm_assignments:
+  # Insight Miner - Mining the core contributions and method insights of the paper
+  insight_miner: "vllm_oss"
+
+  # Result Analyzer - Analyzing the experimental results of the paper
+  results_analyzer: "vllm_oss"
+
+  # Reviewer - Generating the initial draft review
+  reviewer: "vllm_deepreviewer"
+
+  # Related Work Searcher - Using the following two sub-modules:
+  #   keyword_generator: Generating the search keywords
+  #   paper_summarizer: Summarizing the related papers retrieved
+  keyword_generator: "vllm_oss"
+  paper_summarizer: "vllm_oss"
+
+  # Refiner - Refining the review based on the external tool information (fallback to reviewer if not configured)
+  refiner: "vllm_oss"
