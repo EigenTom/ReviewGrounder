@@ -1,0 +1,481 @@
+/* Case Visualization Styles */
+
+.case-container {
+  width: 100%;
+  margin: 1rem 0;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.case-main-layout {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+/* Left Sidebar */
+.case-sidebar {
+  width: 330px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 20px;
+  align-self: flex-start;
+}
+
+.case-question-box {
+  background: linear-gradient(135deg, #4c5fd5 0%, #5a3d8a 100%);
+  color: #ffffff;
+  padding: 1.2rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.case-question-box h3,
+.case-question-box .question-text,
+.case-question-box .answer-text {
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.case-question-box h3 {
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.case-question-box .question-text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 0.8rem;
+}
+
+.case-question-box .answer-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.6rem;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  margin-top: 0.8rem;
+  color: #ffffff;
+}
+
+.case-toggle-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.case-toggle-btn {
+  padding: 0.8rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 2px solid #667eea;
+  background: white;
+  color: #667eea;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.case-toggle-btn:hover {
+  transform: translateX(4px);
+  box-shadow: 0 3px 8px rgba(102, 126, 234, 0.3);
+}
+
+.case-toggle-btn.active {
+  background: #667eea;
+  color: white;
+}
+
+.case-toggle-btn.success-btn {
+  border-color: #48c774;
+  color: #48c774;
+}
+
+.case-toggle-btn.success-btn.active {
+  background: #48c774;
+  color: white;
+}
+
+.case-toggle-btn.failure-btn {
+  border-color: #f14668;
+  color: #f14668;
+}
+
+.case-toggle-btn.failure-btn.active {
+  background: #f14668;
+  color: white;
+}
+
+/* Right Content Area */
+.case-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.case-display-box {
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.case-display-box.success {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border: 2px solid #48c774;
+}
+
+.case-display-box.failure {
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+  border: 2px solid #f14668;
+}
+
+.case-display-box h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid;
+}
+
+.case-display-box.success h4 {
+  color: #2d7a3e;
+  border-bottom-color: #48c774;
+}
+
+.case-display-box.failure h4 {
+  color: #c92a2a;
+  border-bottom-color: #f14668;
+}
+
+/* Action Step - Left/Right Layout with Accordion */
+.action-step {
+  background: white;
+  margin-bottom: 0.8rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.action-step:hover {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+.action-step-header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s ease;
+}
+
+.action-step-header:hover {
+  background: #f8f9fa;
+}
+
+.action-step-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-width: 0;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.case-display-box.success .step-number {
+  background: #48c774;
+  color: white;
+}
+
+.case-display-box.failure .step-number {
+  background: #f14668;
+  color: white;
+}
+
+.action-step-left h5 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+  line-height: 1.4;
+  flex: 1;
+  min-width: 0;
+}
+
+.step-toggle-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background: #e9ecef;
+  transition: transform 0.3s ease, background 0.2s ease;
+  font-size: 1.2rem;
+  color: #667eea;
+}
+
+.action-step.expanded .step-toggle-icon {
+  transform: rotate(180deg);
+  background: #667eea;
+  color: white;
+}
+
+.action-step-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+}
+
+.action-step.expanded .action-step-content {
+  max-height: 800px;
+  padding: 0 1rem 1rem 1rem;
+}
+
+.action-step-right {
+  width: 100%;
+}
+
+.step-detail-box {
+  background: #f8f9fa;
+  padding: 0.8rem;
+  border-radius: 6px;
+  border-left: 3px solid #667eea;
+  text-align: left;
+}
+
+.step-item {
+  margin-bottom: 0.6rem;
+  text-align: left;
+}
+
+.step-item:last-child {
+  margin-bottom: 0;
+}
+
+.step-label {
+  font-weight: 700;
+  color: #667eea;
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.step-content {
+  color: #1a1a4a;
+  line-height: 1.5;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.tool-name {
+  display: inline-block;
+  background: #667eea;
+  color: white;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.result-error {
+  color: #f14668;
+  font-weight: 600;
+}
+
+.result-success {
+  color: #48c774;
+  font-weight: 600;
+}
+
+.result-warning {
+  color: #ffb627;
+  font-weight: 600;
+}
+
+.verifier-box {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 2px solid;
+  text-align: center;
+}
+
+.case-display-box.success .verifier-box {
+  border-color: #2d7a3e;
+  color: #1a4d24;
+  background: #e8f5e9;
+}
+
+.case-display-box.failure .verifier-box {
+  border-color: #c92a2a;
+  color: #8b1a1a;
+  background: #ffebee;
+}
+
+.solution-box {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border: 2px solid;
+}
+
+.case-display-box.success .solution-box {
+  border-color: #48c774;
+}
+
+.case-display-box.failure .solution-box {
+  border-color: #f14668;
+}
+
+.solution-box h5 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  color: #1a1a1a;
+}
+
+.solution-box p {
+  color: #1a1a1a;
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+/* Responsive design - titles scroll with content on narrow screens */
+@media screen and (max-width: 1024px) {
+  .case-main-layout {
+    flex-direction: column;
+  }
+
+  .case-sidebar {
+    width: 100%;
+    position: relative; /* Remove sticky so Paper/Comparison scroll with cases */
+    top: auto;
+  }
+
+  .case-toggle-container {
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .case-toggle-btn {
+    flex: 1;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .action-step-header {
+    padding: 0.8rem;
+  }
+
+  .action-step-left h5 {
+    font-size: 0.85rem;
+  }
+
+  .step-number {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+  }
+
+  .step-toggle-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 1rem;
+  }
+
+  .action-step.expanded .action-step-content {
+    padding: 0 0.8rem 0.8rem 0.8rem;
+  }
+
+  .case-question-box,
+  .case-display-box {
+    padding: 1rem;
+  }
+
+  .step-detail-box {
+    padding: 0.6rem;
+  }
+
+  .step-label,
+  .step-content {
+    font-size: 0.85rem;
+  }
+}
+
+/* Case Example Buttons Layout */
+.case-example-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+  max-width: 950px;
+  margin: 0 auto 2rem auto;
+}
+
+.case-example-buttons .button {
+  padding: 0.65rem 1rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  width: 200px;
+  text-align: center;
+  flex: 0 0 auto;
+}
+
+/* Force 4 buttons in first row, 3 in second row */
+.case-example-buttons .button:nth-child(1),
+.case-example-buttons .button:nth-child(2),
+.case-example-buttons .button:nth-child(3),
+.case-example-buttons .button:nth-child(4) {
+  margin-right: 0.8rem;
+}
+
+.case-example-buttons .button:nth-child(4) {
+  margin-right: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .case-example-buttons {
+    gap: 0.6rem;
+    max-width: 100%;
+  }
+
+  .case-example-buttons .button {
+    width: 45%;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+    margin-right: 0 !important;
+  }
+}

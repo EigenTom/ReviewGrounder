@@ -1,0 +1,58 @@
+/* Tool cards */
+.tool-card {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: white; /* Added to ensure smooth transition */
+  }
+  
+  .tool-name {
+    color: #000000;
+    transition: color 0.3s ease;
+}
+
+.tool-name:hover {
+    color: #2160c4;
+    text-decoration: none;
+}
+
+  .tool-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    /* background-color: #f0f7ff; */
+  }
+  
+  .tool-card .tool-emoji,
+  .tool-card .tool-title,
+  .tool-card .tool-description {
+    transition: all 0.3s ease;
+  }
+  
+  .tool-card:hover .tool-emoji,
+  .tool-card:hover .tool-title,
+  .tool-card:hover .tool-description {
+    transform: scale(1.05);
+  }
+  
+  .tool-card .card-footer-item {
+    transition: all 0.1s ease;
+    color: #4a4a4a;
+    font-weight: 500;
+  }
+  
+  .tool-card .card-footer-item:hover {
+    /* background-color: #f5f5f5; */
+    /* color: #3273dc; */
+    background-color: #e1ecf9; /* Darker shade of blue for footer hover */
+    color: #2160c4; /* Darker blue text color on hover */
+  }
+  
+  .tool-card .card-content {
+    padding: 1.5rem;
+  }
+  
+  .tool-card .card-footer {
+    border-top: 1px solid #f0f0f0;
+  }
+  /* Tool cards */
+  

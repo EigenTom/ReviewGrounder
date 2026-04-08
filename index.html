@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="ReviewGrounder: Improving Review Substantiveness with Rubric-Guided, Tool-Integrated Agents">
+  <meta name="keywords" content="ReviewGrounder, Peer Review, LLM, Rubric, Multi-Agent, ReviewBench">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ReviewGrounder: Improving Review Substantiveness with Rubric-Guided Agents</title>
+
+  <!--<link rel="icon" href="./assets/logos/reviewgrounder.svg">-->
+  <link rel="icon" href="./assets/logos/reviewgrounder.png">
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/tool_cards.css">
+  <link rel="stylesheet" href="./static/css/top_button.css">
+  <link rel="stylesheet" href="./static/css/navbar.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/video.css">
+  <link rel="stylesheet" href="./static/css/case_visualization.css">
+  <link rel="stylesheet" href="./static/css/tool_cards_simplified.css">
+  <link rel="stylesheet" href="./static/css/formula_copy.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/explorer-index.js"></script>
+
+  <!-- Add navbar.js script -->
+  <script src="./static/js/navbar.js"></script>
+
+  <!-- Add MathJax -->
+  <script src="./static/js/mathjax.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- Add case visualization script -->
+  <script src="./static/js/case_visualization.js"></script>
+
+  <!-- Add tool cards scripts -->
+  <script src="./static/js/tool_cards_data.js"></script>
+  <script src="./static/js/tool_cards_simple.js"></script>
+
+  <!-- Add title animation script -->
+  <script src="./static/js/title_animation.js"></script>
+
+  <!-- Add formula copy script -->
+  <script src="./static/js/formula_copy.js"></script>
+
+</head>
+
+
+<body>
+
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+        <a class="navbar-item" href="https://zhuofeng-li.github.io/" target="_blank" title="Zhuofeng Li">
+          <span class="icon">
+            <i class="fas fa-home"></i>
+          </span>
+        </a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            More Research
+          </a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://github.com/TIGER-AI-Lab/verl-tool" target="_blank">
+              <b>VerlTool</b>
+              <p style="font-size:18px; display: inline; margin-left: 5px;">🔥</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Burger Menu for Table of Contents -->
+  <button class="toc-burger" id="toc-burger" aria-label="Toggle table of contents">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <div class="toc-wrapper" id="toc-wrapper">
+    <div class="toc-header">
+      <h4>Table of Contents</h4>
+      <button class="toc-close" id="toc-close" aria-label="Close table of contents">×</button>
+    </div>
+    <ul class="toc-list">
+      <li><a href="#introduction">Introduction</a></li>
+      <li><a href="#reviewbench">ReviewBench</a></li>
+      <li><a href="#reviewgrounder">ReviewGrounder</a></li>
+      <li><a href="#tools">Featured Agents</a></li>
+      <li><a href="#visualization">Case Studies</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="#Share">Share</a></li>
+      <li><a href="#BibTeX">BibTeX</a></li>
+    </ul>
+  </div>
+
+  <div class="toc-overlay" id="toc-overlay"></div>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title is-bold">
+              <img src="assets/logos/reviewgrounder.png" style="width:1.8em; vertical-align: middle;" alt="ReviewGrounder">
+              <span style="vertical-align: middle; position: relative; display: inline-block;">
+                <span id="agent-text" class="clickable-title"
+                      style="color: #000; position: relative; cursor: pointer;">Review</span><span id="flow-text"
+                      style="color: #000; position: relative;"> Grounder</span>
+              </span>
+            </h1>
+            <h2 class="subtitle is-3 publication-subtitle">
+              Improving Review Substantiveness with Rubric-Guided, Tool-Integrated Agents
+            </h2>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://zhuofeng-li.github.io/" target="_blank">Zhuofeng Li</a>*<sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://eigentom.github.io/" target="_blank">Yi Lu</a>*<sup>2</sup>,</span>
+              <span class="author-block">
+                <a href="" target="_blank">Dongfu Jiang</a><sup>3</sup>,</span>
+              <span class="author-block">
+                <a href="https://isaacghx.github.io/about/" target="_blank">Haoxiang Zhang</a><sup>4</sup>,</span>
+              <span class="author-block">
+                <a href="" target="_blank">Yuyang Bai</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="" target="_blank">Chuan Li</a><sup>5</sup>,</span>
+              <span class="author-block">
+                <a href="" target="_blank">Yu Wang</a><sup>6</sup>,</span>
+              <span class="author-block">
+                <a href="" target="_blank">Shuiwang Ji</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="" target="_blank">Jianwen Xie</a><sup>7</sup>,</span>
+              <span class="author-block">
+                <a href="https://yuzhimanhua.github.io/" target="_blank">Yu Zhang</a>†<sup>1</sup>,</span>
+            </div>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup> Texas A&M University, </span>
+              <span class="author-block"><sup>2</sup> University of Toronto, </span>
+              <span class="author-block"><sup>3</sup> University of Waterloo, </span>
+              <span class="author-block"><sup>4</sup> UC San Diego, </span>
+              <span class="author-block"><sup>5</sup> Lambda, </span>
+              <span class="author-block"><sup>6</sup> University of Oregon, </span>
+              <span class="author-block"><sup>7</sup> Akool</span><br>
+              
+              <!-- <span class="paper-block"><b>* Equal Contribution</b></span> <span class="paper-block"><b>† Co-senior authors</b></span> -->
+              <span class="paper-block" style="margin-right: 20px;"><b>* Equal Contribution</b></span>
+              <span class="paper-block" style="margin-left: 20px;"><b>† Corresponding Author</b></span>
+              <br>
+              
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <!-- <span class="link-block">
+                  <a href="https://arxiv.org/pdf/2502.11271.pdf"
+                    class="external-link button is-normal is-rounded is-dark" target="_blank">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span> -->
+                <!-- arxiv link (update when available) -->
+                <span class="link-block">
+                  <a href="#" class="external-link button is-normal is-rounded is-dark" target="_blank">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <!-- Code Link. -->
+                <span class="link-block">
+                  <a href="https://gitfront.io/r/anonymous-repo-acl/ecCqeCKyx8tM/ReviewGrounder-ACL-26-submission/"
+                    class="external-link button is-normal is-rounded is-dark" target="_blank">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                
+                <!-- HuggingFace Paper Link. -->
+                <span class="link-block">
+                  <a href="https://huggingface.co/papers/0000.00000"
+                    class="external-link button is-normal is-rounded is-dark" target="_blank">
+                    <span class="icon">
+                      <img src="assets/logos/huggingface.svg" width="20" height="20" style="vertical-align: middle;" alt="HuggingFace">
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+
+                <!-- Gradio Demo Link. -->
+                <span class="link-block">
+                  <a href="https://huggingface.co/spaces/ReviewGrounder/ReviewGrounder"
+                    class="external-link button is-normal is-rounded is-dark" target="_blank">
+                    <span class="icon">
+                      <img src="assets/logos/gradio.svg" width="18" height="18" style="vertical-align: middle;" alt="Gradio">
+                    </span>
+                    <span>Demo</span>
+                  </a>
+                </span>
+
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Performance Teaser -->
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="content has-text-centered">
+        <img src="assets/models/Framework.png" width="100%" style="max-height:400px" class="hover-float">
+        <p style="text-align: left;">
+          <b>ReviewGrounder</b> decomposes reviewing into collaborating agents: (a) <b>Review Drafter</b> generates an initial draft;
+          (b) Multi-dimensional Grounding Agents (<b>Literature Searcher</b>, <b>Insight Miner</b>, <b>Result Analyzer</b>) enrich the draft via tools;
+          (c) <b>Review Aggregator</b> synthesizes the draft and evidence into a coherent, accurate, and actionable review.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Introduction -->
+  <section class="section" id="introduction">
+    <div class="container" style="margin-bottom: 2vh;">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Introduction</h2>
+          <div class="content has-text-justified">
+            <p>
+              Peer review is the primary mechanism through which the research community filters and improves new scientific work before publication. The rapid growth of submissions at major AI conferences (with counts at leading venues surpassing 10,000) has placed sustained pressure on peer review workflows. Meanwhile, recent advances in LLMs have spurred growing interest in using them to assist or complement the peer review workflow.
+            </p>
+            <p>
+              Despite these advances, prior work has highlighted notable shortcomings in existing LLM-based peer review frameworks: they produce routine, template-like critiques; accept authors' claimed novelty or limitations without thorough verification; and lack technical details, actionable suggestions, as well as justification grounded in the paper. These limitations can be traced to the underutilization of two crucial sources: (1) <b>Reviewer Guidelines and Rubrics</b>—top-tier venues provide well-established guidelines; and (2) <b>Context from Existing Work</b>—assessing novelty inherently requires situating a paper relative to existing work.
+            </p>
+            <p>
+              We introduce <b>ReviewBench</b>, a benchmark that leverages reviewer rubrics in an explicit and systematic manner, and <b>ReviewGrounder</b>, a rubric-guided, tool-integrated, multi-agent framework for producing grounded, content-rich reviews. <b>ReviewGrounder</b> decomposes reviewing into collaborating agents: the drafter produces an initial draft, and subsequent grounding agents (Literature Searcher, Insight Miner, Result Analyzer) refine it using tools. Experiments show that <b>ReviewGrounder</b> with a Phi-4-14B-based drafter and GPT-OSS-120B-based grounding consistently outperforms baselines including GPT-4.1 and DeepSeek-R1-670B across rubric-based dimensions and human-aligned metrics.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--/ Introduction -->
+
+  <!-- ReviewBench -->
+  <section class="section" id="reviewbench">
+    <div class="container" style="margin-bottom: 2vh;">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3"><b>ReviewBench</b>: Rubric-Driven Evaluation Benchmark</h2>
+
+          <!-- Benchmark Figure -->
+          <div class="content has-text-centered" style="margin-bottom: 2rem;">
+            <img src="assets/models/Benchmark.png" style="max-height:350px" class="hover-float">
+            <p style="text-align: left;">
+              Overview of the <b>ReviewBench</b> construction pipeline. For each paper, paper-specific rubrics are instantiated by an aggregated reference review, the submission PDF, and meta-rubrics.
+            </p>
+          </div>
+          
+          <div class="content has-text-justified">
+            <p>
+              Similarity-based metrics and LLM-as-a-Judge approaches used by prior studies either fail to capture fine-grained review competencies or rely on ambiguous evaluation criteria. We introduce <b>ReviewBench</b>, a benchmark built on DeepReview-13K that augments each paper $p$ and its human reviews $\mathsf{H}_p$ with: (1) an aggregated reference review $r^*_p$; and (2) a set of paper-specific rubrics $\mathsf{R}^{\text{paper}}_p$. By leveraging these alongside an evaluator $\mathcal{E}$, ReviewBench enables accurate, multi-faceted assessment.
+            </p>
+            <p>
+              We define eight paper-agnostic meta-rubrics: <b>Core Contribution Accuracy</b>, <b>Results Interpretation</b>, <b>Comparative Analysis</b>, <b>Evidence-Based Critique</b>, <b>Critique Clarity</b>, <b>Completeness Coverage</b>, <b>Constructive Tone</b>, and <b>False or Contradictory Claims</b> (pitfall). Each meta-rubric is instantiated into paper-specific rubrics $\mathsf{R}^{\text{paper}}_{p,i}$ using the reference review and paper content. The overall content score is $S(p,\hat{r}_p) = \sum_{i=1}^{8} s_{p,i}$.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ReviewGrounder -->
+  <section class="section" id="reviewgrounder">
+    <div class="container" style="margin-bottom: 2vh;">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3"><b>ReviewGrounder</b>: Rubric-Guided, Tool-Integrated Agents</h2>
+
+          <!-- Framework Figure -->
+          <div class="content has-text-centered" style="margin-bottom: 2rem;">
+            <img src="assets/models/Framework.png" width="100%" style="max-height:400px" class="hover-float">
+            <p style="text-align: left;">
+              Overview of <b>ReviewGrounder</b>. (a) <b>Review Drafter</b>: Generates an initial draft based on the paper. (b) Multi-dimensional Grounding Agents: <b>Literature Searcher</b> retrieves and summarizes related work; <b>Insight Miner</b> verifies methodology and core contributions; <b>Result Analyzer</b> checks experimental results. (c) <b>Review Aggregator</b>: Synthesizes the draft and evidence into a coherent, accurate, and actionable review.
+            </p>
+          </div>
+          
+          <div class="content has-text-justified">
+            <p>
+              <b>ReviewGrounder</b> casts reviewing as a staged process that progressively refines an initial draft via targeted analysis, external evidence, and structured synthesis.
+            </p>
+            <p>
+              <b>Stage I: Draft Review Generation.</b> Given a paper $p$, a fine-tuned <b>Drafter</b> $\mathcal{P}$ generates an initial draft review $r^{(0)}$ that captures basic structure and stylistic conventions.
+            </p>
+            <p>
+              <b>Stage II: Multi-dimensional Review Grounding.</b> Three specialized agents collaboratively enrich the draft: <b>Literature Searcher</b> $\mathcal{S}$ situates the submission within contemporary literature via Semantic Scholar API and reranking; <b>Insight Miner</b> $\mathcal{M}$ consolidates conceptual understanding and refines method-focused critiques; <b>Result Analyzer</b> $\mathcal{A}$ strengthens empirical grounding by examining experiments, datasets, baselines, and quantitative evidence.
+            </p>
+            <p>
+              <b>Stage III: Rubric-Guided Synthesis.</b> The <b>Aggregator</b> $\mathcal{G}$ synthesizes the draft and grounded evidence $\mathsf{E}(p)$ with meta-rubrics $\mathsf{R}^{\text{meta}}$ to produce a coherent, accurate, and actionable final review. Paper-specific rubrics are not exposed at generation time, preventing evaluation leakage.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+
+  <!-- Featured Agents Section -->
+  <section class="section tools-section" id="tools">
+    <div class="container">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Featured Agents</h2>
+          <p class="subtitle" style="margin-bottom: 2rem;">
+            ReviewGrounder decomposes reviewing into collaborating agents with specialized capabilities
+          </p>
+
+          <!-- Two-column layout: sidebar + content -->
+          <div class="tools-layout">
+            <!-- Left sidebar with tool buttons -->
+            <div class="tools-sidebar" id="tools-sidebar">
+              <!-- Tool selector buttons will be generated by JavaScript -->
+            </div>
+
+            <!-- Right content area for tool cards -->
+            <div class="tools-content">
+              <div class="tools-grid" id="tools-grid">
+                <!-- Tool cards will be generated by JavaScript -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--/ Tool Cards -->
+
+  <!-- Case Studies -->
+  <section class="section" id="visualization">
+    <div class="container">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Case Studies</h2>
+          <p class="subtitle" style="margin-bottom: 2rem;">
+            Qualitative comparison: Comparing reviews generated by ReviewGrounder vs. DeepReviewer-14B on the same paper
+          </p>
+          <div class="content has-text-justified">
+            <p>
+              <b>ReviewGrounder</b> produces concise, evidence-grounded critiques with specific references (sections, equations, tables). 
+              <b>DeepReviewer-14B</b> tends to generate verbose, repetitive text that echoes prior reviewers without adding substantive, paper-specific insight. 
+              Toggle below to compare the two approaches.
+            </p>
+          </div>
+          <!-- <div class="case-example-buttons" style="margin-bottom: 1.5rem;"></div> -->
+          <div id="case-visualization-container"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section class="section" id="results">
+    <div class="container">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Experimental Results</h2>
+          <div class="content has-text-justified">
+            <p>
+              We conduct evaluation on <b>ReviewBench</b> using two complementary metric families: (1) <b>Rubric-based Evaluation</b>—assesses textual quality across eight paper-specific rubric dimensions (Sec. 3.2); (2) <b>Numeric-field Evaluation</b>—measures predicted ratings with MSE/MAE and decisions with ACC/F1 (Sec. 3.3). Paper-specific rubrics and the evaluator are fixed across all methods; models access only the paper text at generation time.
+            </p>
+            <p>
+              <b>Baselines:</b> (1) Foundation Models: Qwen3-32B, QWQ-32B, GPT-4o, GPT-4.1; (2) Agentic Frameworks: AI Scientist, AgentReview (instantiated with GPT-4o/GPT-4.1); (3) Fine-tuned Reviewers: CycleReviewer-8B/70B, DeepReviewer-7B/14B. <b>ReviewGrounder</b> uses Phi-4-14B as Drafter and GPT-OSS-120B for grounding agents.
+            </p>
+
+            <h3 class="title is-4" style="margin-top:2rem;">Table 1: Rubric-based Evaluation</h3>
+            <p>Overall, <b>ReviewGrounder</b> consistently outperforms all baselines. Relative to the best foundation model (Qwen3-32B), +38%. Against AgentReview and AI Scientist (GPT-4o): +121% and +193%. Exceeds DeepReviewer-14B by 36%. Outperforms GPT-4o across all dimensions (+135%).</p>
+            <div style="overflow-x:auto; margin:1.5rem 0;">
+              <table class="table is-bordered is-striped" style="font-size:0.8em;">
+                <thead>
+                  <tr><th>Method</th><th>Model</th><th>Core</th><th>Res.</th><th>Comp.</th><th>EBC</th><th>Clr.</th><th>Cov.</th><th>Tone</th><th>Contradict.</th><th>Overall</th><th>Δ</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td rowspan="4">Foundation</td><td>Qwen3-32B</td><td>1.70</td><td>0.76</td><td>0.58</td><td>0.14</td><td>1.61</td><td>1.15</td><td>2.00</td><td>-0.15</td><td>7.80</td><td style="color:#0b5;font-weight:bold">↑38%</td></tr>
+                  <tr><td>QWQ-32B</td><td>1.69</td><td>0.65</td><td>0.35</td><td>0.12</td><td>1.68</td><td>0.95</td><td>2.00</td><td>-0.08</td><td>7.35</td><td style="color:#0b5;font-weight:bold">↑46%</td></tr>
+                  <tr><td>GPT-4o</td><td>1.20</td><td>0.10</td><td>0.03</td><td>0.00</td><td>1.05</td><td>0.33</td><td>1.98</td><td>-0.12</td><td>4.58</td><td style="color:#0b5;font-weight:bold">↑135%</td></tr>
+                  <tr><td>GPT-4.1</td><td>1.76</td><td>0.70</td><td>0.34</td><td>0.11</td><td>1.63</td><td>1.17</td><td>2.00</td><td>-0.04</td><td>7.66</td><td style="color:#0b5;font-weight:bold">↑41%</td></tr>
+                  <tr><td rowspan="2">AgentReview</td><td>GPT-4o</td><td>1.13</td><td>0.16</td><td>0.11</td><td>0.13</td><td>1.34</td><td>0.59</td><td>2.00</td><td>-0.16</td><td>4.87</td><td style="color:#0b5;font-weight:bold">↑121%</td></tr>
+                  <tr><td>GPT-4.1</td><td>1.03</td><td>0.13</td><td>0.12</td><td>0.00</td><td>1.41</td><td>0.63</td><td>1.98</td><td>-0.16</td><td>4.96</td><td style="color:#0b5;font-weight:bold">↑117%</td></tr>
+                  <tr><td rowspan="2">AI Scientist</td><td>GPT-4o</td><td>0.85</td><td>0.00</td><td>0.02</td><td>0.00</td><td>0.67</td><td>0.18</td><td>1.76</td><td>-0.19</td><td>3.68</td><td style="color:#0b5;font-weight:bold">↑193%</td></tr>
+                  <tr><td>GPT-4.1</td><td>1.67</td><td>0.48</td><td>0.36</td><td>0.08</td><td>1.56</td><td>1.13</td><td>1.94</td><td>-0.09</td><td>7.09</td><td style="color:#0b5;font-weight:bold">↑52%</td></tr>
+                  <tr><td rowspan="2">CycleReviewer</td><td>Llama-3.1-8B</td><td>0.99</td><td>0.10</td><td>0.06</td><td>0.01</td><td>0.58</td><td>0.15</td><td>1.66</td><td>-0.45</td><td>3.10</td><td style="color:#0b5;font-weight:bold">↑248%</td></tr>
+                  <tr><td>Llama-3.1-70B</td><td>1.02</td><td>0.16</td><td>0.10</td><td>0.01</td><td>0.77</td><td>0.26</td><td>1.85</td><td>-0.64</td><td>3.52</td><td style="color:#0b5;font-weight:bold">↑206%</td></tr>
+                  <tr><td rowspan="2">DeepReviewer</td><td>Phi-4-7B</td><td>1.42</td><td>0.45</td><td>0.33</td><td>0.13</td><td>1.37</td><td>1.06</td><td>1.94</td><td>-0.40</td><td>6.32</td><td style="color:#0b5;font-weight:bold">↑70%</td></tr>
+                  <tr><td>Phi-4-14B</td><td>1.63</td><td>0.65</td><td>0.50</td><td>0.35</td><td>1.68</td><td>1.29</td><td>1.99</td><td>-0.19</td><td>7.90</td><td style="color:#0b5;font-weight:bold">↑36%</td></tr>
+                  <tr style="background:#ffccc9;"><td><b>ReviewGrounder</b></td><td><b>Phi-4-14B</b></td><td><b>1.85</b></td><td><b>1.41</b></td><td><b>0.91</b></td><td><b>1.48</b></td><td><b>1.92</b></td><td><b>1.33</b></td><td><b>2.00</b></td><td><b>-0.12</b></td><td><b>10.77</b></td><td>—</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="font-size:0.9em;"><i>Higher scores indicate better performance. Contradict. is a pitfall dimension scored in {−2, −1, 0}; others in {0, 1, 2}. Core=CORE CONTRIBUTION ACCURACY, Res.=RESULTS INTERPRETATION, Comp.=COMPARATIVE ANALYSIS, EBC=EVIDENCE-BASED CRITIQUE, Clr.=CRITIQUE CLARITY, Cov.=COMPLETENESS COVERAGE, Tone=CONSTRUCTIVE TONE, Contradict.=FALSE OR CONTRADICTORY CLAIMS.</i></p>
+
+            <h3 class="title is-4" style="margin-top:2rem;">Table 2: Numeric-field Evaluation</h3>
+            <p>Compared with all baselines, <b>ReviewGrounder</b> achieves the lowest rating error (MSE: 1.1607, MAE: 0.8597) and highest decision accuracy (ACC: 0.6809, F1: 0.6699). Relative to the strongest AI Scientist variant (Gemini-2.0-Flash-Thinking), improves ACC by 8% and reduces MSE by ~63%.</p>
+            <div style="overflow-x:auto; margin:1.5rem 0;">
+              <table class="table is-bordered is-striped" style="font-size:0.85em;">
+                <thead>
+                  <tr><th>Method</th><th>Model</th><th>ACC↑</th><th>F1↑</th><th>MSE↓</th><th>MAE↓</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td rowspan="3">AgentReview</td><td>Claude-3-5-sonnet</td><td>0.2826</td><td>0.2541</td><td>2.8406</td><td>1.2989</td></tr>
+                  <tr><td>Gemini-2.0-Flash-Thinking</td><td>0.4242</td><td>0.4242</td><td>2.6186</td><td>1.2170</td></tr>
+                  <tr><td>DeepSeek-V3</td><td>0.3140</td><td>0.2506</td><td>1.9951</td><td>1.1017</td></tr>
+                  <tr><td rowspan="5">AI Scientist</td><td>GPT-o1</td><td>0.4167</td><td>0.4157</td><td>4.3072</td><td>1.7917</td></tr>
+                  <tr><td>Claude-3-5-sonnet</td><td>0.5579</td><td>0.4440</td><td>3.0992</td><td>1.3500</td></tr>
+                  <tr><td>Gemini-2.0-Flash-Thinking</td><td>0.6139</td><td>0.4808</td><td>3.9232</td><td>1.6470</td></tr>
+                  <tr><td>DeepSeek-V3</td><td>0.4059</td><td>0.3988</td><td>4.8006</td><td>1.8403</td></tr>
+                  <tr><td>DeepSeek-R1</td><td>0.4259</td><td>0.4161</td><td>4.7719</td><td>1.8099</td></tr>
+                  <tr><td rowspan="2">CycleReviewer</td><td>Llama-3.1-8B</td><td>0.2354</td><td>0.3988</td><td>3.1324</td><td>1.3663</td></tr>
+                  <tr><td>Llama-3.1-70B</td><td>0.1545</td><td>0.4156</td><td>1.8440</td><td>1.0643</td></tr>
+                  <tr><td rowspan="2">DeepReviewer</td><td>Phi-4-7B</td><td>0.6381</td><td>0.6068</td><td>1.4442</td><td>0.9416</td></tr>
+                  <tr><td>Phi-4-14B</td><td>0.6667</td><td>0.5204</td><td>1.3527</td><td>0.9041</td></tr>
+                  <tr style="background:#ffccc9;"><td><b>ReviewGrounder</b></td><td><b>Phi-4-14B</b></td><td><b>0.6809</b></td><td><b>0.6699</b></td><td><b>1.1607</b></td><td><b>0.8597</b></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="title is-4" style="margin-top:2rem;">Table 3: Ablation Study</h3>
+            <p><b>Impact of Drafter Backbones.</b> When trained on the same SFT data, Qwen3-4B outperforms Phi-4-7B but remains inferior to Phi-4-14B. Smaller Drafters (e.g., Qwen3-4B: 10.6418) still benefit substantially from grounding and aggregation.</p>
+            <p><b>Impact of Grounding Agents.</b> Omitting any agent (Searcher, Miner, Analyzer) degrades performance relative to the full model (10.7699), underscoring the importance of each component.</p>
+            <div style="overflow-x:auto; margin:1.5rem 0;">
+              <table class="table is-bordered is-striped" style="font-size:0.85em;">
+                <thead>
+                  <tr><th>Drafter Phi-4-14B</th><th>Drafter Phi-4-7B</th><th>Drafter Qwen3-4B</th><th>Searcher</th><th>Miner</th><th>Analyzer</th><th>Overall</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td></td><td></td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>10.6418</td></tr>
+                  <tr><td></td><td>✓</td><td></td><td>✓</td><td>✓</td><td>✓</td><td>10.5928</td></tr>
+                  <tr><td>✓</td><td></td><td></td><td></td><td>✓</td><td>✓</td><td>10.6568</td></tr>
+                  <tr><td>✓</td><td></td><td></td><td>✓</td><td></td><td>✓</td><td>10.6526</td></tr>
+                  <tr><td>✓</td><td></td><td></td><td>✓</td><td>✓</td><td></td><td>10.0186</td></tr>
+                  <tr style="background:#ffccc9;"><td>✓</td><td></td><td></td><td>✓</td><td>✓</td><td>✓</td><td><b>10.7699</b></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="title is-4" style="margin-top:2rem;">Additional Analyses</h3>
+            <p>
+              <b>Hyperparameter Study (Literature Searcher).</b> 10 reranked papers per keyword yields the highest overall score. OpenScholar-Reranker significantly outperforms BAAI-BGE Base/Large.
+            </p>
+            <div class="box m-5">
+              <div class="content has-text-centered">
+                <img src="assets/results/ablation.png" width="85%" alt="Ablation on Literature Searcher">
+                <p><b>Figure 3:</b> Ablation on Literature Searcher configurations under rubric-based evaluation.</p>
+              </div>
+            </div>
+            <p>
+              <b>Defense Against Adversarial Attacks.</b> With malicious instructions injected into input papers (500-sample subset): ReviewGrounder shows strong resilience (10.70→10.65, −0.05); DeepReviewer-14B drops from 7.70 to 7.30. Rubric-based evaluation prevents score inflation via instruction injection.
+            </p>
+            <div class="box m-5">
+              <div class="content has-text-centered">
+                <img src="assets/results/attack.png" width="85%" alt="Attack robustness">
+                <p><b>Figure 4:</b> Comparison with baselines under normal and attack scenarios via rubric-based evaluation.</p>
+              </div>
+            </div>
+            <p>
+              <b>Human Evaluation.</b> On 120 papers, expert raters (avg. 2,000 Google Scholar citations) closely align with the LLM-evaluator: Pearson r=0.8954, Spearman ρ=0.7923, MAE=0.0969, Pairwise Error=0.1494.
+            </p>
+          </div>
+        </div>
+      </div>
+  </section>
+  <!--/ Results -->
+
+  
+  <!-- Share Buttons -->
+  <section class="section" id="Share">
+  <div class="column has-text-centered">
+    <h2 class="title is-3 has-text-centered">Share <span style="color: #000;"><b>Review</b></span><span style="color: #000;"><b>Grounder</b></span></h2>
+    <div class="social-share-buttons" style="margin-top: 20px;">
+      <a href="https://twitter.com/intent/tweet?text=ReviewGrounder:%20Improving%20Review%20Substantiveness%20with%20Rubric-Guided,%20Tool-Integrated%20Agents%20%23ACL2026%20%23PeerReview" 
+         class="button is-info is-outlined" target="_blank">
+        <span class="icon"><i class="fab fa-twitter"></i></span>
+        <span>Share on X (Twitter)</span>
+      </a>
+      <a href="https://www.linkedin.com/feed/?shareActive=true&shareUrl=https%3A%2F%2Freviewgrounder.github.io" 
+         class="button is-info is-outlined" style="margin-left: 10px;" target="_blank">
+        <span class="icon"><i class="fab fa-linkedin"></i></span>
+        <span>Share on LinkedIn</span>
+      </a>
+    </div>
+  </div>
+  </section>
+
+  <!-- BibTeX -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title is-3 has-text-centered">BibTeX</h2>
+      <pre><code>@inproceedings{reviewgrounder2026acl,
+    title={ReviewGrounder: Improving Review Substantiveness with Rubric-Guided, Tool-Integrated Agents},
+    author={Li, Zhuofeng and Lu, Yi and Zhang, Haoxiang and Zhang, Yu},
+    booktitle={Proceedings of the Association for Computational Linguistics (ACL)},
+    year={2026}
+}</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <div class="section" id="org-banners">
+      <div class="org-banner-row">
+      <!-- First row: TAMU, UofT, UWaterloo, UCSD -->
+        <a href="https://www.tamu.edu/" target="_blank" rel="external">
+          <img class="center-block org-banner" src="assets/logos/tamu.svg" alt="Texas A&M University">
+        </a>
+        <a href="https://www.utoronto.ca/" target="_blank" rel="external">
+          <img class="center-block org-banner" src="assets/logos/uoft.png" alt="University of Toronto">
+        </a>
+        <a href="https://uwaterloo.ca/" target="_blank" rel="external">
+          <img class="center-block org-banner" src="assets/logos/uwaterloo.png" alt="University of Waterloo">
+        </a>
+        <a href="https://ucsd.edu/" target="_blank" rel="external">
+          <img class="center-block org-banner" src="assets/logos/ucsd.svg" alt="UC San Diego">
+        </a>
+
+      </div>
+      <!-- Second row: Lambda, UOregon, Akool -->
+      <div class="org-banner-row">
+        <a href="https://lambdalabs.com/" target="_blank" rel="external">
+          <img class="center-block org-banner" src="assets/logos/lambda.png" alt="Lambda">
+        </a>
+        <a href="https://www.uoregon.edu/" target="_blank" rel="external">
+          <img class="center-block org-banner" src="assets/logos/uoregon.svg" alt="University of Oregon">
+        </a>
+        <a href="https://akool.com/" target="_blank" rel="external">
+          <img class="center-block org-banner" src="assets/logos/akool.png" alt="Akool">
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- License -->
+  <footer class="footer">
+    <!-- <div class="container"> -->
+    <div class="content has-text-centered">
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is adapted from <a href="https://nerfies.github.io/">Nerfies</a> and <a
+              href="https://mathvista.github.io/">MathVista</a>, licensed under a <a rel="license"
+              href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+              Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- </div> -->
+  </footer>
+
+</body>
+
+  <!-- Back to top button -->
+  <button onclick="topFunction()" id="topButton" title="Go to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+  
+</html>

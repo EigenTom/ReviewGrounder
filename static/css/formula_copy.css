@@ -1,0 +1,51 @@
+/* Formula wrapper with copy button */
+.formula-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.formula-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+  font-size: 14px;
+  color: #555;
+  z-index: 10;
+}
+
+.formula-wrapper:hover .formula-copy-btn {
+  opacity: 1;
+}
+
+.formula-copy-btn:hover {
+  background: rgba(240, 240, 240, 0.95);
+  color: #000;
+}
+
+.formula-copy-btn:active {
+  transform: scale(0.95);
+}
+
+.formula-copy-btn.copied {
+  background: rgba(76, 175, 80, 0.9);
+  color: white;
+  border-color: #4caf50;
+}
+
+.formula-copy-btn i {
+  pointer-events: none;
+}
+
+/* Ensure formula wrapper works with scrollable math */
+.math-scrollable .formula-wrapper {
+  display: block;
+}

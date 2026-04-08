@@ -1,0 +1,331 @@
+
+<div class="columns is-multiline">
+
+    <!-- Tool Card: Generalist Solutioner -->
+    <div class="column is-one-third">
+      <div class="card tool-card">
+        <div class="card-content">
+          <div class="content">
+            <p class="title is-4">
+              <span class="tool-emoji" style="font-size: 24px;">🧙</span> 
+              <a href="tools/generalist_solution_generator/tool.html" class="tool-name">Generalist Solutioner</a>
+            </p>
+            <p class="tool-description">
+              Base tool that answers general questi-ons without using any external tools.
+            </p>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="tools/generalist_solution_generator/tool.html#metadata" class="card-footer-item" target="_blank">Metadata</a>
+          <a href="https://github.com/zou-group/toolbox-agent/blob/main/opentools/tools/generalist_solution_generator/tool.py" class="card-footer-item" target="_blank">Code</a>
+          <a href="tools/generalist_solution_generator/tool.html#example" class="card-footer-item" target="_blank">Example</a>
+        </footer>
+      </div>
+    </div>
+  
+    <!-- Tool Card: Image Captioner -->
+    <div class="column is-one-third">
+      <div class="card tool-card">
+        <div class="card-content">
+          <div class="content">
+            <p class="title is-4">
+              <span class="tool-emoji" style="font-size: 24px;">📸</span>
+              <a href="tools/image_captioner/tool.html" class="tool-name">Image Captioner</a>
+            </p>
+            <p class="tool-description">
+              <!-- Generate captions for images using OpenAI's multimodal model. -->
+              Generate a caption for a given image with a text prompt.
+            </p>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="tools/image_captioner/tool.html#metadata" class="card-footer-item" target="_blank">Metadata</a>
+          <a href="https://github.com/zou-group/toolbox-agent/blob/main/opentools/tools/image_captioner/tool.py" class="card-footer-item" target="_blank">Code</a>
+          <a href="tools/image_captioner/tool.html#example" class="card-footer-item" target="_blank">Example</a>
+        </footer>
+      </div>
+    </div>
+  
+    <!-- Tool Card: Relevant Patch Zoomer -->
+    <div class="column is-one-third">
+      <div class="card tool-card">
+        <div class="card-content">
+          <div class="content">
+            <p class="title is-4">
+              <span class="tool-emoji" style="font-size: 24px;">🔍</span>
+              <a href="tools/relevant_patch_zoomer/tool.html" class="tool-name">Relevant Patch Zoomer</a>
+            </p>
+            <p class="tool-description">
+              <!-- tool that analyzes an image, divides it into 5 regions (4 quarters + center), and identifies the most relevant patches based on a question. The returned patches are zoomed in by a factor of 2. -->
+               Locate and zoom in relevant quarter patches in an image given a question.
+            </p>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="tools/relevant_patch_zoomer/tool.html#metadata" class="card-footer-item" target="_blank">Metadata</a>
+          <a href="https://github.com/zou-group/toolbox-agent/blob/main/opentools/tools/relevant_patch_zoomer/tool.py" class="card-footer-item" target="_blank">Code</a>
+          <a href="tools/relevant_patch_zoomer/tool.html#example" class="card-footer-item" target="_blank">Example</a>
+        </footer>
+      </div>
+    </div>
+  
+    <!-- Tool Card: Text Detector -->
+    <div class="column is-one-third">
+      <div class="card tool-card">
+        <div class="card-content">
+          <div class="content">
+            <p class="title is-4">
+              <span class="tool-emoji" style="font-size: 24px;">📝</span>
+              <a href="tools/text_detector/tool.html" class="tool-name">Text Detector</a>
+            </p>
+            <p class="tool-description">
+              <!-- detects text in an image using EasyOCR. -->
+               Detect text with coordinates and confi-dence scores in an image by EasyOCR.
+            </p>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="tools/text_detector/tool.html#metadata" class="card-footer-item" target="_blank">Metadata</a>
+          <a href="https://github.com/zou-group/toolbox-agent/blob/main/opentools/tools/text_detector/tool.py" class="card-footer-item" target="_blank">Code</a>
+          <a href="tools/text_detector/tool.html#example" class="card-footer-item" target="_blank">Example</a>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Tool Card: Object Detector -->
+    <div class="column is-one-third">
+      <div class="card tool-card">
+        <div class="card-content">
+          <div class="content">
+            <p class="title is-4">
+              <span class="tool-emoji" style="font-size: 24px;">👁️</span>
+              <a href="tools/object_detector/tool.html" class="tool-name">Object Detector</a>
+            </p>
+            <p class="tool-description">
+              <!-- detects objects in an image using the Grounding DINO model and saves individual object images with empty padding -->
+              Detect objects in an image using the Grounding DINO model.
+            </p>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="tools/object_detector/tool.html#metadata" class="card-footer-item" target="_blank">Metadata</a>
+          <a href="https://github.com/zou-group/toolbox-agent/blob/main/opentools/tools/object_detector/tool.py" class="card-footer-item" target="_blank">Code</a>
+          <a href="tools/object_detector/tool.html#example" class="card-footer-item" target="_blank">Example</a>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Tool Card: Wikipedia Searcher -->
+    <div class="column is-one-third">
+      <div class="card tool-card">
+        <div class="card-content">
+          <div class="content">
+            <p class="title is-4">
+              <span class="tool-emoji" style="font-size: 24px;">📚</span>
+              <a href="tools/wikipedia_knowledge_searcher/tool.html" class="tool-name">Wikipedia Search</a>
+            </p>
+            <p class="tool-description">
+              <!-- searches Wikipedia and returns web text based on a given query -->
+              Search Wikipedia for relevant informa-tion based on a given query.
+            </p>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="tools/wikipedia_knowledge_searcher/tool.html#metadata" class="card-footer-item" target="_blank">Metadata</a>
+          <a href="https://github.com/zou-group/toolbox-agent/blob/main/opentools/tools/wikipedia_knowledge_searcher/tool.py" class="card-footer-item" target="_blank">Code</a>
+          <a href="tools/wikipedia_knowledge_searcher/tool.html#example" class="card-footer-item" target="_blank">Example</a>
+        </footer>
+      </div>
+    </div>
+  
+    <!-- Tool Card: Google Searcher -->
+    <div class="column is-one-third">
+      <div class="card tool-card">
+        <div class="card-content">
+          <div class="content">
+            <p class="title is-4">
+              <span class="tool-emoji" style="font-size: 24px;">🌐</span>
+              <a href="tools/google_search/tool.html" class="tool-name">Google Search</a>
+            </p>
+            <p class="tool-description">
+              <!-- performs Google searches based on a given text query -->
+              Search the Google website for relevant information based on a given query.
+            </p>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="tools/google_search/tool.html#metadata" class="card-footer-item" target="_blank">Metadata</a>
+          <a href="https://github.com/zou-group/toolbox-agent/blob/main/opentools/tools/google_search/tool.py" class="card-footer-item" target="_blank">Code</a>
+          <a href="tools/google_search/tool.html#example" class="card-footer-item" target="_blank">Example</a>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Tool Card: URL Extractor -->
+    <div class="column is-one-third">
+      <div class="card tool-card">  
+        <div class="card-content">
+          <div class="content">
+            <p class="title is-4">
+              <span class="tool-emoji" style="font-size: 24px;">🔗</span>
+              <a href="tools/url_text_extractor/tool.html" class="tool-name">URL Extractor</a>
+            </p>
+            <p class="tool-description">
+              <!-- extracts all text from a given URL -->
+              Visit the given URL and extract all text from that page.
+            </p>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="tools/url_text_extractor/tool.html#metadata" class="card-footer-item" target="_blank">Metadata</a>
+          <a href="https://github.com/zou-group/toolbox-agent/blob/main/opentools/tools/url_text_extractor/tool.py" class="card-footer-item" target="_blank">Code</a>
+          <a href="tools/url_text_extractor/tool.html#example" class="card-footer-item" target="_blank">Example</a>
+        </footer>
+      </div>
+    </div>
+
+
+    <!-- Tool Card: Python Interpreter -->
+    <div class="column is-one-third">
+      <div class="card tool-card">  
+        <div class="card-content">
+          <div class="content">
+            <p class="title is-4">
+              <span class="tool-emoji" style="font-size: 24px;">🧮</span>
+              <a href="tools/python_code_generator/tool.html" class="tool-name">Python Interpreter</a>
+            </p>
+            <p class="tool-description">
+              <!-- generates and executes simple Python code snippets for basic arithmetical calculations and math-related problems -->
+              Generate and execute Python code snippets for basic calculations.
+            </p>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="tools/python_code_generator/tool.html#metadata" class="card-footer-item" target="_blank">Metadata</a>
+          <a href="https://github.com/zou-group/toolbox-agent/blob/main/opentools/tools/python_code_generator/tool.py" class="card-footer-item" target="_blank">Code</a>
+          <a href="tools/python_code_generator/tool.html#example" class="card-footer-item" target="_blank">Example</a>
+        </footer>
+      </div>
+    </div>
+
+
+    <!-- Tool Card: ArXiv Paper Search -->
+    <div class="column is-one-third">
+      <div class="card tool-card">
+        <div class="card-content">
+          <div class="content">
+            <p class="title is-4">
+              <span class="tool-emoji" style="font-size: 24px;">📄</span>
+              <a href="tools/arxiv_paper_searcher/tool.html" class="tool-name">ArXiv Paper Search</a>
+            </p>
+            <p class="tool-description">
+              <!-- Search arXiv for papers based on a given query. -->
+              Search arXiv for the latest literature based on a given query.
+            </p>
+          </div>
+        </div>
+        <footer class="card-footer">  
+          <a href="tools/arxiv_paper_searcher/tool.html#metadata" class="card-footer-item" target="_blank">Metadata</a>
+          <a href="https://github.com/zou-group/toolbox-agent/blob/main/opentools/tools/arxiv_paper_searcher/tool.py" class="card-footer-item" target="_blank">Code</a>
+          <a href="tools/arxiv_paper_searcher/tool.html#example" class="card-footer-item" target="_blank">Example</a>
+        </footer>
+      </div>
+    </div>
+
+
+    <!-- Tool Card: PubMed Paper Search -->
+    <div class="column is-one-third">
+      <div class="card tool-card">
+        <div class="card-content">
+          <div class="content">
+            <p class="title is-4">
+              <span class="tool-emoji" style="font-size: 24px;">🏥</span>
+              <a href="tools/pubmed_search/tool.html" class="tool-name">PubMed Paper Search</a>
+            </p>
+            <p class="tool-description">
+              <!-- searches PubMed Central to retrieve relevant article abstracts based on a given list of text queries. Use this ONLY if you cannot use the other more specific ontology tools -->
+              Search PubMed for the latest literature based on a given query.
+            </p>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="tools/pubmed_search/tool.html#metadata" class="card-footer-item" target="_blank">Metadata</a>
+          <a href="https://github.com/zou-group/toolbox-agent/blob/main/opentools/tools/pubmed_search/tool.py" class="card-footer-item" target="_blank">Code</a>
+          <a href="tools/pubmed_search/tool.html#example" class="card-footer-item" target="_blank">Example</a>
+        </footer>
+      </div>
+    </div>
+
+
+    <!-- Tool Card: Nature News Search -->
+    <div class="column is-one-third">
+      <div class="card tool-card">
+        <div class="card-content">
+          <div class="content">
+            <p class="title is-4">
+              <span class="tool-emoji" style="font-size: 24px;">🌿</span>
+              <a href="tools/nature_news_fetcher/tool.html" class="tool-name">Nature News Search</a>
+            </p>
+            <p class="tool-description">
+              <!-- fetches the latest news articles from Nature -->
+              Search the latest news articles from the Nature website.
+            </p>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="tools/nature_news_fetcher/tool.html#metadata" class="card-footer-item" target="_blank">Metadata</a>
+          <a href="https://github.com/zou-group/toolbox-agent/blob/main/opentools/tools/nature_news_fetcher/tool.py" class="card-footer-item" target="_blank">Code</a>
+          <a href="tools/nature_news_fetcher/tool.html#example" class="card-footer-item" target="_blank">Example</a>
+        </footer>
+      </div>
+    </div>              
+
+
+    <!-- Tool Card: Pathology Classifier -->
+    <div class="column is-one-third">
+      <div class="card tool-card">
+        <div class="card-content">
+          <div class="content">
+            <p class="title is-4">
+              <span class="tool-emoji" style="font-size: 24px;">🔬</span>
+              <a href="tools/path_generalist_classifier/tool.html" class="tool-name">Pathology Classifier</a>
+            </p>
+            <p class="tool-description">
+              <!-- answering multiple choice questions about H&E microscopy images. -->
+              Classify H&E-stained pathology images into one of the given options.
+            </p>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a href="tools/path_generalist_classifier/tool.html#metadata" class="card-footer-item" target="_blank">Metadata</a>
+          <a href="https://github.com/zou-group/toolbox-agent/blob/main/opentools/tools/path_generalist_classifier/tool.py" class="card-footer-item" target="_blank">Code</a>
+          <a href="tools/path_generalist_classifier/tool.html#example" class="card-footer-item" target="_blank">Example</a>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Tool Card: More Tools -->
+    <div class="column is-one-third">
+      <div class="card tool-card">
+        <div class="card-content">
+          <div class="content">
+            <p class="title is-4">
+              <span class="tool-emoji" style="font-size: 24px;">⚒️</span>
+               More Tools ...
+            </p>
+            <p class="tool-description">
+              More tools can be added!
+              <br><br>
+            </p>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a class="card-footer-item">Metadata</a>
+          <a class="card-footer-item" target="_blank">Code</a>
+          <a class="card-footer-item">Example</a>
+        </footer>
+      </div>
+    </div>
+
+
+  </div>
