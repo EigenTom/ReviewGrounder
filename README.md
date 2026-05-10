@@ -1,313 +1,335 @@
-# ReviewGrounder: Improving Review Substantiveness with Rubric-Guided, Tool-Integrated Agents
+<a name="readme-top"></a>
 
-This repository accompanies the paper: *"ReviewGrounder: Improving Review Substantiveness with Rubric-Guided, Tool-Integrated Agents"*. It contains the implementation of **ReviewGrounder**, a rubric-guided, tool-integrated multi-agent framework for generating substantive, evidence-grounded academic paper reviews. 
+<h1 align="center">ReviewGrounder</h1>
 
-ReviewGrounder addresses the key limitation of existing LLM-based reviewers—their tendency to produce superficial, formulaic comments lacking substantive feedback—by explicitly leveraging reviewer rubrics and contextual grounding in existing work.
+<h2 align="center">
+  Improving Review Substantiveness with Rubric-Guided, Tool-Integrated Agents
+</h2>
 
-## System Architecture
+<div align="center">
+  <a href="https://arxiv.org/abs/2604.14261v1"><img src="https://img.shields.io/badge/arXiv-B31B1B?style=for-the-badge&logo=arXiv&logoColor=white" alt="arXiv"></a>
+  <a href="https://huggingface.co/spaces/ReviewGrounder/GradioDemo"><img src="https://img.shields.io/badge/Demo-F97316.svg?style=for-the-badge&logo=gradio&logoColor=white" alt="Demo"></a>
+  <a href="https://huggingface.co/ReviewGrounder"><img src="https://img.shields.io/badge/Hugging%20Face-FFD21E?style=for-the-badge&logo=huggingface&logoColor=white" alt="Hugging Face"></a>
+  <a href="https://x.com/yuz9yuz/status/2048823620193902704"><img src="https://img.shields.io/badge/Twitter-000000?style=for-the-badge&logo=X&logoColor=white" alt="Twitter"></a>
+</div>
 
-ReviewGrounder implements a multi-agent framework with clear role separation:
+---
 
-### Drafting Agent (`paper_reviewer.py`)
-The **drafter** generates an initial review draft based solely on the paper content. This stage produces a structured review with strengths, weaknesses, suggestions, and questions, but may lack deep contextual grounding.
+## Introduction
 
-### Grounding Agents
+**ReviewGrounder** is a **rubric-guided, tool-integrated agent framework** for generating substantive academic paper reviews. It targets a common failure mode of LLM-based reviewing: reviews that are fluent but generic, shallow, or weakly grounded in the paper and surrounding literature.
 
-1. **Related Work Searcher** (`related_work_searcher.py`): 
-   - Generates search keywords from paper content
-   - Retrieves relevant papers via academic APIs
-   - Summarizes and analyzes related work
-   - Provides context for novelty assessment
+Instead of asking a single model to produce a final review in one pass, ReviewGrounder decomposes reviewing into a drafting stage and multiple grounding stages. The system first writes an initial review, then gathers additional evidence from paper results, paper insights, and related work before producing a refined, evidence-grounded review.
 
-2. **Paper Results Analyzer** (`paper_results_analyzer.py`):
-   - Extracts and analyzes experimental sections
-   - Summarizes experimental setup, results, and findings
-   - Identifies limitations and gaps
+This repository contains the ReviewGrounder implementation, the Gradio demo entry point, paper-search utilities, configurable LLM backends, and the ReviewBench evaluation code used to assess review quality with paper-specific rubrics.
 
-3. **Paper Insight Miner** (`paper_insight_miner.py`):
-   - Extracts key insights and contributions
-   - Identifies technical strengths and weaknesses
+## Main Results
 
-4. **Review Refiner** (`review_refiner.py`):
-   - Synthesizes information from all grounding agents
-   - Refines the initial draft with evidence-based critiques
-   - Ensures suggestions are actionable and well-justified
-   - Maintains consistency across review sections
+ReviewGrounder is evaluated with **ReviewBench**, a rubric-based evaluation framework designed to measure whether reviews are substantive, evidence-backed, and useful for authors. ReviewBench combines venue guidelines, paper content, and human reviews to build paper-specific rubrics, then evaluates generated reviews against those rubrics.
 
-### Evaluation System (`src/evaluator/`)
-The **ReviewBench** evaluation framework:
-- **Rubric Generation**: Creates paper-specific rubrics from venue guidelines, paper content, and human reviews
-- **LLM-based Evaluation**: Deep qualitative assessment aligned with rubrics
-- **Rule-based Metrics**: Quantitative metrics (MSE, MAE, Spearman correlation)
+With a Phi-4-14B-based drafter and a GPT-OSS-120B-based grounding stage, ReviewGrounder outperforms strong foundation-model, agentic-reviewing, and fine-tuned-reviewer baselines on ReviewBench, including larger backbones such as GPT-4.1 and DeepSeek-R1-670B, across both human-judgment alignment and rubric-based review quality.
 
-## Installation
+The full experimental setup and results are available in the paper:
+
+- **Paper:** [ReviewGrounder: Improving Review Substantiveness with Rubric-Guided, Tool-Integrated Agents](https://arxiv.org/abs/2604.14261v1)
+- **Demo:** [ReviewGrounder Gradio Demo](https://huggingface.co/spaces/ReviewGrounder/GradioDemo)
+- **Models and artifacts:** [ReviewGrounder on Hugging Face](https://huggingface.co/ReviewGrounder)
+
+## Key Features
+
+- **Rubric-guided review refinement:** ReviewGrounder uses explicit reviewing criteria to move beyond generic praise and criticism toward targeted, actionable feedback.
+- **Tool-integrated grounding:** The pipeline augments the initial review with related-work retrieval, experimental-results analysis, and paper-insight mining.
+- **Multi-agent role separation:** Dedicated agents handle drafting, literature grounding, result analysis, insight extraction, and final refinement.
+- **Flexible LLM backends:** Components can be assigned to different OpenAI-compatible backends, including local vLLM services and API-hosted models.
+- **Interactive demo support:** The repository includes a Gradio application for PDF upload, stepwise review generation, and raw JSON inspection.
+- **ReviewBench evaluation:** The evaluator supports rubric generation, LLM-based review assessment, and quantitative agreement metrics.
+
+---
+
+## Table of Contents
+
+- [Setup](#setup)
+- [Quick Start](#quick-start)
+- [ReviewGrounder Pipeline](#reviewgrounder-pipeline)
+- [Configuration](#configuration)
+- [ReviewBench Evaluation](#reviewbench-evaluation)
+- [Repository Layout](#repository-layout)
+- [Acknowledgements](#acknowledgements)
+- [Citation](#citation)
+
+---
+
+<a name="setup"></a>
+## Setup
 
 ### Prerequisites
 
-- Python >= 3.8
-- CUDA-capable GPU (for local vLLM deployment, optional if using OpenAI API)
-- Sufficient GPU memory for your chosen model (if using vLLM)
+- Python 3.8+
+- `uv` or `pip`
+- `ASTA_API_KEY` for related-paper search through Asta
+- One OpenAI-compatible LLM endpoint, such as a local vLLM server or hosted API
+- CUDA-capable GPUs if you run local vLLM models or local rerankers
 
-### Setup
+### Installation
 
-1. Clone the repository:
 ```bash
 git clone <repository-url>
 cd ReviewGrounder
-```
 
-2. Install dependencies:
-```bash
 uv venv
 source .venv/bin/activate
 uv pip install -r requirements.txt
 ```
 
-3. Configure your API keys and settings:
-   - Copy `shared/configs/config.yaml` and customize as needed
-   - Set environment variables:
-     - `ASTA_API_KEY`: For paper search via Asta API (recommended)
-     - `OPENAI_API_KEY`: If using OpenAI API instead of vLLM
-     - `S2_API_KEY`: Alternative paper search API (optional)
+If you prefer `pip`:
 
-4. (Optional) If using local vLLM, start your vLLM service:
 ```bash
-# Start vLLM service on a single port
-bash scripts/gpt_oss_start_vllm_service.sh
-
-# Or start multiple services with load balancing
-bash scripts/start_vllm_with_balancer.sh
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
+### Environment Variables
+
+Set the API keys required by your configuration:
+
+```bash
+export ASTA_API_KEY="your-asta-api-key"
+export OPENAI_API_KEY="your-openai-api-key"  # optional, if using an OpenAI-compatible hosted backend
+export S2_API_KEY="your-semantic-scholar-api-key"  # optional fallback paper-search backend
+```
+
+ReviewGrounder reads model and retrieval settings from:
+
+- [`shared/configs/config.yaml`](shared/configs/config.yaml)
+- [`shared/configs/llm_service_config.yaml`](shared/configs/llm_service_config.yaml)
+- [`shared/configs/prompts.yaml`](shared/configs/prompts.yaml)
+
+<a name="quick-start"></a>
 ## Quick Start
 
-### Basic Usage
+### Try the Hosted Demo
 
-Generate a review using the command-line interface:
+The fastest way to try ReviewGrounder is the Hugging Face Space:
+
+[https://huggingface.co/spaces/ReviewGrounder/GradioDemo](https://huggingface.co/spaces/ReviewGrounder/GradioDemo)
+
+Upload a paper PDF, provide an OpenAI-compatible API endpoint if needed, and inspect the stepwise outputs for the initial review, related work, result analysis, insight mining, and final refined review.
+
+### Run the Local Gradio App
 
 ```bash
-python -m src.reviewer_agent.cli --paper paper.json --output review.json
+export ASTA_API_KEY="your-asta-api-key"
+python app.py
 ```
 
-Where `paper.json` contains your paper data in JSON format with fields like `title`, `abstract`, `text`, etc.
+By default, Gradio will print a local URL such as `http://127.0.0.1:7860`.
 
-### Using the Python API
+### Review a Paper from the CLI
 
-For programmatic access:
+Prepare a JSON file with fields such as `title`, `abstract`, `content` or `text`, and optional `keywords`:
+
+```json
+{
+  "title": "Your Paper Title",
+  "abstract": "Paper abstract...",
+  "content": "Full paper text...",
+  "keywords": ["review generation", "scientific evaluation"]
+}
+```
+
+Then run:
+
+```bash
+python -m src.reviewer_agent.cli \
+  --paper paper.json \
+  --output review.json \
+  --verbose
+```
+
+Useful options:
+
+```bash
+python -m src.reviewer_agent.cli \
+  --paper paper.json \
+  --max-related-papers 15 \
+  --publication-date-range "2020:" \
+  --venues "ICLR,NeurIPS,ICML" \
+  --review-format detailed \
+  --output review.json
+```
+
+### Use the Python API
 
 ```python
 from src.reviewer_agent import review_paper_with_refiner
 
-# Load your paper data
 paper_data = {
     "title": "Your Paper Title",
     "abstract": "Paper abstract...",
-    "text": "Full paper text...",
-    # ... other fields
+    "content": "Full paper text...",
+    "keywords": ["paper review", "LLM agents"],
 }
 
-# Generate review (drafting + grounding stages)
 review = review_paper_with_refiner(paper_data=paper_data)
 print(review)
 ```
 
-The `review_paper_with_refiner` function implements the full ReviewGrounder pipeline:
-1. **Drafting**: Generates initial review draft
-2. **Grounding**: Retrieves related work, analyzes results, extracts insights
-3. **Refinement**: Synthesizes all information into a refined, evidence-grounded review
+<a name="reviewgrounder-pipeline"></a>
+## ReviewGrounder Pipeline
 
-## Usage Examples
+ReviewGrounder uses a drafting-and-grounding workflow:
 
-### Generate a Review with Related Work Context
+| Stage | Component | File | Role |
+|-------|-----------|------|------|
+| Drafting | Paper Reviewer | `src/reviewer_agent/paper_reviewer.py` | Generates the initial review from the target paper. |
+| Related-work grounding | Related Work Searcher | `src/reviewer_agent/related_work_searcher.py` | Searches, reranks, and summarizes relevant prior work. |
+| Results grounding | Paper Results Analyzer | `src/reviewer_agent/paper_results_analyzer.py` | Extracts experimental evidence, claims, and limitations. |
+| Insight grounding | Paper Insight Miner | `src/reviewer_agent/paper_insight_miner.py` | Identifies core contributions, technical insights, and weaknesses. |
+| Refinement | Review Refiner | `src/reviewer_agent/review_refiner.py` | Synthesizes all evidence into the final grounded review. |
 
-```bash
-python -m src.reviewer_agent.cli \
-    --paper paper.json \
-    --max-related-papers 15 \
-    --review-format detailed \
-    --output review.json
-```
+The high-level orchestration lives in:
 
-### Filter Related Work by Date and Venue
+- `src/reviewer_agent/main_pipeline.py`
+- `src/reviewer_agent/main_pipeline_concurrent.py`
+- `src/reviewer_agent/single_paper_inference.py`
 
-```bash
-python -m src.reviewer_agent.cli \
-    --paper paper.json \
-    --publication-date-range "2020:" \
-    --venues "ICLR,NeurIPS,ICML" \
-    --output review.json
-```
+## Configuration
 
-### Use Custom vLLM Endpoint
+### LLM Backends
 
-```bash
-python -m src.reviewer_agent.cli \
-    --paper paper.json \
-    --vllm-url "http://your-server:8000/v1" \
-    --output review.json
-```
+ReviewGrounder supports OpenAI-compatible model services. You can assign different model backends to different pipeline components in [`shared/configs/llm_service_config.yaml`](shared/configs/llm_service_config.yaml):
 
-### Evaluate Reviews on ReviewBench
-
-```python
-# 1. Generate reviews
-from src.reviewer_agent import review_paper_with_refiner
-review = review_paper_with_refiner(paper_data={...})
-
-# 2. Evaluate reviews using ReviewBench
-from src.evaluator import evaluate_reviews
-results = evaluate_reviews(parquet_path="reviews.parquet")
-```
-
-## Directory Structure
-
-```
-anonymize_codebase/
-├── src/
-│   ├── reviewer_agent/          # ReviewGrounder implementation
-│   │   ├── __init__.py
-│   │   ├── paper_reviewer.py    # Drafting agent
-│   │   ├── review_refiner.py    # Grounding agent: review refinement
-│   │   ├── related_work_searcher.py  # Grounding agent: literature search
-│   │   ├── paper_results_summarizer.py  # Grounding agent: results analysis
-│   │   ├── paper_insight_miner.py  # Grounding agent: insight extraction
-│   │   ├── main_pipeline.py     # Full pipeline orchestration
-│   │   ├── cli.py               # Command-line interface
-│   │   └── paper_search/        # Paper search APIs
-│   │       ├── asta_api.py
-│   │       ├── semantic_scholar_api.py
-│   │       └── paper_retriever.py
-│   │
-│   └── evaluator/               # ReviewBench evaluation framework
-│       ├── 1_get_rubrics.py     # Rubric generation
-│       ├── 2_evaluate.py        # Review evaluation
-│       └── ...
-│
-├── shared/
-│   ├── utils/                   # Shared utilities
-│   │   ├── llm_service.py       # LLM service abstraction
-│   │   ├── load_balancer.py     # Load balancing for vLLM
-│   │   ├── reranker.py          # Paper reranking
-│   │   └── ...
-│   │
-│   └── configs/                 # Configuration files
-│       ├── config.yaml          # Main config
-│       ├── llm_service_config.yaml  # LLM service settings
-│       └── prompts.yaml         # Review generation prompts
-│
-├── scripts/                      # Utility scripts
-│   ├── start_vllm_with_balancer.sh
-│   ├── start_load_balancer.sh
-│   └── ...
-│
-├── requirements.txt             # Python dependencies
-└── README.md                    # This file
-```
-
-## Configuration Guide
-
-### LLM Service Configuration
-
-ReviewGrounder supports two LLM backends:
-
-1. **vLLM** (recommended for local deployment): Fast inference with local GPU
-   - Default: GPT-OSS-120B for grounding stage
-   - Can use smaller models (e.g., Phi-4-14B) for drafting stage
-
-2. **OpenAI API**: Cloud-based, no local GPU required
-
-Configure in `shared/configs/llm_service_config.yaml`:
-
-```yaml
-vllm:
-  base_url: "http://localhost:8000/"
-  model_name: "openai/gpt-oss-120b"
-  max_tokens: 16384
-
-gpt:
-  enabled: false
-  api_key: "your-api-key-here"
-  model_name: "gpt-4o"
-```
-
-We offer the option of assigning different backends for each agent.
 ```yaml
 llm_assignments:
-  keyword_generator: "vllm"  # For related work search
-  paper_summarizer: "vllm"   # For results summarization
-  reviewer: "vllm"           # For drafting stage
-  refiner: "vllm"            # For grounding/refinement stage
+  insight_miner: "vllm_oss"
+  results_analyzer: "vllm_oss"
+  reviewer: "vllm_deepreviewer"
+  keyword_generator: "vllm_oss"
+  paper_summarizer: "vllm_oss"
+  refiner: "vllm_oss"
 ```
 
-### Paper Search Configuration
+Each backend defines its own `base_url`, `model_name`, sampling parameters, timeout, and retry behavior.
 
-Configure paper search APIs in `shared/configs/config.yaml`:
+### Local vLLM Services
+
+Start a single local vLLM service:
+
+```bash
+bash scripts/gpt_oss_start_vllm_service.sh
+```
+
+For multi-GPU serving with load balancing:
+
+```bash
+bash scripts/start_vllm_with_balancer.sh
+```
+
+Then set the corresponding backend `base_url` in `shared/configs/llm_service_config.yaml`.
+
+### Paper Search and Reranking
+
+Paper search is configured in [`shared/configs/config.yaml`](shared/configs/config.yaml):
 
 ```yaml
 paper_search:
   asta:
-    api_key: null  # Set via ASTA_API_KEY env var
+    api_key: null
+    api_key_pool_path: "asta_api_pool.txt"
     endpoint: "https://asta-tools.allen.ai/mcp/v1"
-  
   semantic_scholar:
-    api_key: null  # Set via S2_API_KEY env var
+    api_key: null
+  reranker:
+    model: "OpenScholar/OpenScholar_Reranker"
 ```
 
-### Review Format Options
+At runtime, the Asta key can be supplied through `ASTA_API_KEY` or `--asta-api-key`.
 
-Choose from different review formats:
-- `detailed`: Comprehensive review with all sections (default)
-- `summary`: Concise review summary
-- `structured`: Structured format with specific sections
-- `strict_detailed`: Strict adherence to detailed format requirements
+<a name="reviewbench-evaluation"></a>
+## ReviewBench Evaluation
 
-## Load Balancing for vLLM
+ReviewBench evaluates generated reviews with paper-specific rubrics. The evaluation framework includes:
 
-For production use with multiple GPUs, you can set up load balancing:
+- **Rubric generation:** builds rubrics from venue guidelines, paper content, and human reviews.
+- **LLM-based review assessment:** scores generated reviews against substantive, rubric-aligned criteria.
+- **Rule-based metrics:** computes agreement and error metrics such as MSE, MAE, and Spearman correlation.
+
+The evaluator code is under [`src/evaluator/`](src/evaluator/). A typical two-step workflow is:
 
 ```bash
-# Start 4 vLLM services on ports 8000-8003
-bash scripts/gpt_oss_start_vllm_service.sh
+python src/evaluator/1_get_rubrics.py \
+  --json_path input_reviews.json \
+  --output_path eval_rubrics.json \
+  --yaml_path src/evaluator/prompts.yaml \
+  --config_path src/evaluator/configs.yaml \
+  --max_workers 5
 
-# Start load balancer on port 8004
-python -m shared.utils.load_balancer \
-    --backends http://localhost:8000/v1 http://localhost:8001/v1 http://localhost:8002/v1 http://localhost:8003/v1 \
-    --port 8004 \
-    --strategy round_robin
+python src/evaluator/2_evaluate.py \
+  --rubrics_path eval_rubrics.json \
+  --reviews_path model_reviews.json \
+  --mode both \
+  --yaml_path src/evaluator/prompts.yaml \
+  --config_path src/evaluator/configs.yaml \
+  --semantic_output semantic_results.json \
+  --auto_metric_output auto_metric_results.json \
+  --max_workers 32
 ```
 
-Then point your config to `http://localhost:8004/v1`.
+The repository also includes evaluator scripts for multiple review-generation baselines:
 
-## Evaluation: ReviewBench
+```text
+src/evaluator/2_evaluate.py
+src/evaluator/2_evaluate_agenticreview.py
+src/evaluator/2_evaluate_aiscientist.py
+src/evaluator/2_evaluate_cyclereviewer.py
+```
 
-ReviewGrounder is evaluated on **ReviewBench**, a benchmark that:
+<a name="repository-layout"></a>
+## Repository Layout
 
-- Leverages paper-specific rubrics derived from:
-  - Official venue guidelines (e.g., ACL, ICML, NeurIPS, ICLR)
-  - Paper content
-  - Human-written reviews
+```text
+ReviewGrounder/
+├── app.py                         # Gradio app entry point
+├── gradio_app/                    # Gradio UI components and PDF inference helpers
+├── src/
+│   ├── reviewer_agent/            # ReviewGrounder pipeline
+│   │   ├── cli.py                 # Command-line interface
+│   │   ├── main_pipeline.py       # Main pipeline orchestration
+│   │   ├── paper_reviewer.py      # Initial review drafter
+│   │   ├── related_work_searcher.py
+│   │   ├── paper_results_analyzer.py
+│   │   ├── paper_insight_miner.py
+│   │   ├── review_refiner.py
+│   │   └── paper_search/          # Asta and Semantic Scholar integrations
+│   └── evaluator/                 # ReviewBench evaluation
+├── shared/
+│   ├── configs/                   # Model, retrieval, and prompt configs
+│   └── utils/                     # LLM service, reranking, logging, and parsing utilities
+├── scripts/                       # vLLM, reranker, and load-balancer helpers
+├── requirements.txt
+└── README.md
+```
 
-- Evaluates reviews across diverse dimensions:
-  - Evidence-based critique
-  - Constructive tone
-  - Technical depth
-  - And more...
+<a name="acknowledgements"></a>
+## Acknowledgements
 
-- Measures both:
-  - Alignment with human judgments (scores, decisions)
-  - Rubric-based quality (beyond just outcome prediction)
+ReviewGrounder builds on open-source tools and services for LLM inference, academic paper retrieval, reranking, and interactive demos, including vLLM, Gradio, Asta, Semantic Scholar, OpenAI-compatible APIs, and Hugging Face.
 
-See `src/evaluator/` for the evaluation framework implementation.
-
+<a name="citation"></a>
 ## Citation
 
 If you use ReviewGrounder in your research, please cite:
 
 ```bibtex
-@inproceedings{reviewgrounder2026,
+@misc{li2026reviewgrounder,
   title={ReviewGrounder: Improving Review Substantiveness with Rubric-Guided, Tool-Integrated Agents},
-  author={Anonymous},
-  booktitle={Proceedings of ACL 2026},
-  year={2026}
+  author={Zhuofeng Li and Yi Lu and Dongfu Jiang and Haoxiang Zhang and Yuyang Bai and Chuan Li and Yu Wang and Shuiwang Ji and Jianwen Xie and Yu Zhang},
+  year={2026},
+  eprint={2604.14261},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL}
 }
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
